@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actix-web-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: actix-web-app
+  template:
+    metadata:
+      labels:
+        app: actix-web-app
+    spec:
+      containers:
+      - name: actix-web-app
+        image: actix-web-app
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: actix-web-app-service
+spec:
+  selector:
+    app: actix-web-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      nodePort: 30080 
+  type: NodePort
